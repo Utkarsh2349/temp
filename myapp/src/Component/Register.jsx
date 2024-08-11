@@ -1,7 +1,17 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { register } from "../Services/user-service";
 import { Login } from "./Login";
-
+import {
+  Form,
+  Label,
+  Input,
+  FormGroup,
+  Button,
+  Container,
+  Row,
+  Col,
+} from "reactstrap";
 const Register = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [registerData, setRegisterData] = useState({
@@ -23,76 +33,107 @@ const Register = () => {
       [property]: event.target.value,
     });
   };
-  const handleAlreadyRegiteredbutton = (event) => {
+  const handleAlreadyRegisteredButton = (event) => {
     setIsRegistered(true);
   };
 
   return (
-    <>
-      {registerData.name} {registerData.age} {registerData.password}{" "}
-      {registerData.salary}
+    <div
+      style={{
+        backgroundColor: "rgba(44,62,80",
+      }}
+    >
       {!isRegistered && (
-        <form>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={registerData.name}
-            onChange={(event) => {
-              handleChange(event, "name");
-            }}
-          />
-          <br />
-          <br />
+        <Container
+          style={{
+            backgroundColor: "#FFDAB9",
+            maxWidth: "500px",
+            margin: "0 auto",
+            padding: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            boxShadow:
+              "0 10px 20px rgba(0, 0, 0, 0.5), 0 15px 40px rgba(0, 0, 0, 0.5)",
+            transform: "translateY(40px)",
+          }}
+        >
+          <Row className="justify-content-center">
+            <Col md="8">
+              <Form>
+                <FormGroup floating>
+                  <Input
+                    type="text"
+                    id="exampleName"
+                    name="name"
+                    value={registerData.name}
+                    onChange={(event) => {
+                      handleChange(event, "name");
+                    }}
+                  />
+                  <Label htmlFor="exampleName">Name</Label>
+                </FormGroup>
 
-          <label htmlFor="password">Password</label>
-          <input
-            type="text"
-            id="password"
-            name="password"
-            value={registerData.password}
-            onChange={(event) => {
-              handleChange(event, "password");
-            }}
-          />
-          <br />
-          <br />
+                <FormGroup floating>
+                  <Input
+                    type="text"
+                    id="password"
+                    name="password"
+                    value={registerData.password}
+                    onChange={(event) => {
+                      handleChange(event, "password");
+                    }}
+                  />
+                  <Label htmlFor="password">Password</Label>
+                </FormGroup>
 
-          <label htmlFor="age">Age</label>
-          <input
-            type="text"
-            id="age"
-            name="age"
-            value={registerData.age}
-            onChange={(event) => {
-              handleChange(event, "age");
-            }}
-          />
-          <br />
-          <br />
+                <FormGroup floating>
+                  <Input
+                    type="text"
+                    id="age"
+                    name="age"
+                    value={registerData.age}
+                    onChange={(event) => {
+                      handleChange(event, "age");
+                    }}
+                  />
+                  <Label htmlFor="age">Age</Label>
+                </FormGroup>
 
-          <label htmlFor="salary">Salary</label>
-          <input
-            type="text"
-            id="salary"
-            name="salary"
-            value={registerData.salary}
-            onChange={(event) => {
-              handleChange(event, "salary");
-            }}
-          />
-          <br />
-          <br />
+                <FormGroup floating>
+                  <Input
+                    type="text"
+                    id="salary"
+                    name="salary"
+                    value={registerData.salary}
+                    onChange={(event) => {
+                      handleChange(event, "salary");
+                    }}
+                  />
+                  <Label htmlFor="salary">Salary</Label>
+                </FormGroup>
 
-          <button onClick={handleRegisterFormSubmit}>Register</button>
-          <br />
-          <br />
-          <button onClick={handleAlreadyRegiteredbutton}>LogIn</button>
-        </form>
+                <Button
+                  color="primary"
+                  className="ml-2"
+                  onClick={handleRegisterFormSubmit}
+                >
+                  Register
+                </Button>
+
+                <Button
+                  color="secondary"
+                  onClick={handleAlreadyRegisteredButton}
+                  className="ml-2"
+                >
+                  Log In
+                </Button>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       )}
       {isRegistered && <Login />}
-    </>
+    </div>
   );
 };
 export default Register;

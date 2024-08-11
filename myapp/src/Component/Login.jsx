@@ -1,7 +1,11 @@
+import React from "react";
 import { useState } from "react";
 import { login } from "../Services/user-service";
 import Register from "./Register";
 import DisplayEmploye from "./DisplayEmploye";
+import { Container, Form, FormGroup, Input, Label, Button } from "reactstrap";
+import Cookies from "js-cookie";
+import "./Login.css";
 export const Login = () => {
   const [loginData, setLoginData] = useState({ name: "", password: "" });
   const [isRegistered2, setIsRegistered2] = useState(true);
@@ -12,6 +16,7 @@ export const Login = () => {
   const handleLoginButton = (event) => {
     event.preventDefault();
     login(loginData).then((resp) => console.log(resp));
+    Cookies.set("username", loginData.name, { expires: 1 });
     setIsLoggedIn(true);
   };
   const handleRegisterButton = (event) => {
@@ -19,34 +24,54 @@ export const Login = () => {
   };
 
   return (
-    <>
+    <div style={{
+      backgroundColor:"rgba(44,62,80"
+    }}>
       {isRegistered2 && !isLoggedIn && (
-        <form>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={loginData.name}
-            onChange={(event) => handleChange(event, "name")}
-          />{" "}
-          <br />
-          <br />
-          <label htmlFor="password">Password</label>
-          <input
-            type="text"
-            name="password"
-            id="password"
-            value={loginData.password}
-            onChange={(event) => handleChange(event, "password")}
-          />{" "}
-          <br /> <br />
-          <button onClick={handleLoginButton}>Login</button>
-          <button onClick={handleRegisterButton}>Register</button>
-        </form>
+        <Container
+          style={{
+            backgroundColor: "#FFDAB9",
+            maxWidth: "500px",
+            margin: "0 auto",
+            padding: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            boxShadow:
+              "0 10px 20px rgba(0, 0, 0, 0.5), 0 15px 40px rgba(0, 0, 0, 0.5)",
+            transform: "translateY(100px)",
+          }}
+        >
+          <Form>
+            <FormGroup floating>
+              <Input
+                type="text"
+                id="name"
+                name="name"
+                value={loginData.name}
+                onChange={(event) => handleChange(event, "name")}
+              />
+              <Label htmlFor="name">Name</Label>{" "}
+            </FormGroup>
+            <FormGroup floating>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                value={loginData.password}
+                onChange={(event) => handleChange(event, "password")}
+              />
+              <Label htmlFor="password">Password</Label>{" "}
+            </FormGroup>
+            <br /> <br />
+            <Button color="primary" onClick={handleLoginButton}>
+              Login
+            </Button>
+            <Button onClick={handleRegisterButton}>Register</Button>
+          </Form>
+        </Container>
       )}
       {!isRegistered2 && <Register />}
       {isLoggedIn && <DisplayEmploye />}
-    </>
+    </div>
   );
 };
