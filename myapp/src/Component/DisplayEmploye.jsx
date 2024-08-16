@@ -26,6 +26,9 @@ import {
 } from "reactstrap";
 import EditCurrentAddressOn from "./EditCurrentAddressOn";
 import EditPermanentAddress from "./EditPermanentAddress";
+import AddPermanentAddress from "./AddPermanentAddress";
+import AddCurrentAddress from "./AddCurrentAddress";
+import { toast, ToastContainer } from "react-toastify";
 
 const DisplayEmploye = () => {
   var username = Cookies.get("username");
@@ -38,14 +41,6 @@ const DisplayEmploye = () => {
     useState(false);
   const [isEditPermanentAddress, setIsEditPermanentAddress] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
-  const [addressToBeAdded, setAddressToBeAdded] = useState({
-    city: "",
-    state: "",
-  });
-  const [addressToBeAdded2, setAddressToBeAdded2] = useState({
-    city: "",
-    state: "",
-  });
 
   const [isAddCurrentAddressOn, setIsAddCurrentAddressOn] = useState(false);
   const [isAddPermanentAddressOn, setIsAddPermanentAddressOn] = useState(false);
@@ -78,6 +73,9 @@ const DisplayEmploye = () => {
   const handleLogout = (event) => {
     setIsLoggedIn(false);
     Cookies.remove("username");
+    toast.success("Logout Successfull", {
+      position: "bottom-center",
+    });
   };
   const handleIsEdit1 = () => {
     setEditUserData(userData);
@@ -105,38 +103,10 @@ const DisplayEmploye = () => {
     deleteEmployee(username).then((response) => {
       console.log(response);
       setIsLoggedIn(false);
+      toast.warning("Employe Details Deleted", {
+        position: "bottom-center",
+      });
     });
-  };
-
-  const handleChangeAddAddress = (event, property) => {
-    setAddressToBeAdded({
-      ...addressToBeAdded,
-      [property]: event.target.value,
-    });
-  };
-
-  const handleChangeAddAddress2 = (event, property) => {
-    setAddressToBeAdded2({
-      ...addressToBeAdded2,
-      [property]: event.target.value,
-    });
-  };
-
-  const handleAddAddress = () => {
-    console.log(addressToBeAdded, username);
-    addCurrentEmployeeAddress(username, addressToBeAdded).then((response) => {
-      console.log(response);
-      setIsAddCurrentAddressOn(true);
-    });
-  };
-
-  const handleAddAddress2 = () => {
-    addPermanentEmployeeAddress(username, addressToBeAdded2).then(
-      (response) => {
-        console.log(response);
-        setIsAddPermanentAddressOn(true);
-      }
-    );
   };
 
   const handleEditCurrentAddressButton = () => {
@@ -168,7 +138,7 @@ const DisplayEmploye = () => {
           // justifyContent: "center",
           backgroundColor: "#CBAACB",
           alignItems: "center",
-          height: "200vh",
+          height: "110vh",
           display: isLoggedIn ? "inline-block" : "none",
         }}
       >
@@ -265,6 +235,30 @@ const DisplayEmploye = () => {
                       marginBottom: "0.5rem",
                     }}
                   >
+                    <strong>Street:</strong>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {userData.emp.currentAddress.street}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <strong>Pincode:</strong>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {userData.emp.currentAddress.pincode}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
                     <strong>City:</strong>
                     <span style={{ marginLeft: "0.5rem" }}>
                       {userData.emp.currentAddress.city}
@@ -309,44 +303,9 @@ const DisplayEmploye = () => {
               ""
             )}
             {userData && !userData.emp.currentAddress ? (
-              <Card
-                className="my-2"
-                color="secondary"
-                inverse
-                style={{
-                  width: "24rem",
-                }}
-              >
-                <CardHeader>Add Current Address</CardHeader>
-
-                <Form>
-                  <FormGroup floating>
-                    <Input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={addressToBeAdded.city}
-                      onChange={(event) =>
-                        handleChangeAddAddress(event, "city")
-                      }
-                    />
-                    <Label htmlForm="city">City</Label>
-                  </FormGroup>
-                  <FormGroup floating>
-                    <Input
-                      type="text"
-                      id="state"
-                      name="state"
-                      value={addressToBeAdded.state}
-                      onChange={(event) =>
-                        handleChangeAddAddress(event, "state")
-                      }
-                    />
-                    <Label htmlForm="state">State</Label>
-                  </FormGroup>
-                  <Button onClick={handleAddAddress}>Save</Button>
-                </Form>
-              </Card>
+              <AddCurrentAddress
+                setIsAddCurrentAddressOn={setIsAddCurrentAddressOn}
+              />
             ) : (
               ""
             )}
@@ -362,43 +321,9 @@ const DisplayEmploye = () => {
             )}
 
             {userData && !userData.emp.permanentAddress ? (
-              <Card
-                className="my-2"
-                color="secondary"
-                inverse
-                style={{
-                  width: "18rem",
-                }}
-              >
-                <CardHeader>Add Permanent Address </CardHeader>
-                <Form>
-                  <FormGroup floating>
-                    <Input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={addressToBeAdded2.city}
-                      onChange={(event) =>
-                        handleChangeAddAddress2(event, "city")
-                      }
-                    />
-                    <Label htmlFor="city">City</Label>
-                  </FormGroup>
-                  <FormGroup floating>
-                    <Input
-                      type="text"
-                      id="state"
-                      name="state"
-                      value={addressToBeAdded2.state}
-                      onChange={(event) =>
-                        handleChangeAddAddress2(event, "state")
-                      }
-                    />
-                    <Label htmlFor="state">State</Label>
-                  </FormGroup>
-                  <Button onClick={handleAddAddress2}>Save</Button>
-                </Form>
-              </Card>
+              <AddPermanentAddress
+                setIsAddPermanentAddressOn={setIsAddPermanentAddressOn}
+              />
             ) : (
               ""
             )}
@@ -436,6 +361,27 @@ const DisplayEmploye = () => {
                     justifyContent: "space-between",
                   }}
                 >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    <strong>Street:</strong>
+                    <span>{userData.emp.permanentAddress.street}</span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    <strong>Pincode:</strong>
+                    <span>{userData.emp.permanentAddress.pincode}</span>
+                  </div>
+
                   <div
                     style={{
                       display: "flex",
@@ -571,7 +517,9 @@ const DisplayEmploye = () => {
           </>
         )}
       </div>
-      {!isLoggedIn && <Login />}
+      <div style={{ display: !isLoggedIn ? "block" : "none" }}>
+        {!isLoggedIn && <Login />}
+      </div>
     </>
   );
 };

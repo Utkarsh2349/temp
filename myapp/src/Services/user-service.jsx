@@ -1,11 +1,21 @@
 import { myAxois } from "./helper";
 
 export const register = (employee) => {
-  return myAxois.post("/register", employee).then((response) => response.data);
+  return myAxois
+    .post("/register", employee)
+    .then((response) => response.data)
+    .catch((error) => {
+      return Promise.reject(error);
+    });
 };
 
 export const login = (loginn) => {
-  return myAxois.post("/login", loginn).then((response) => response.data);
+  return myAxois
+    .post("/login", loginn)
+    .then((response) => response.data)
+    .catch((error) => {
+      return Promise.reject(error);
+    });
 };
 
 export const getEmployee = (username) => {
@@ -57,6 +67,6 @@ export const deleteEmployeePermanentAddress = (username, id) => {
 
 export const updateEmployeeAddress = (username, id, address) => {
   return myAxois
-    .put("/updateEmployeeAddress", address,{ params: { username, id } })
+    .put("/updateEmployeeAddress", address, { params: { username, id } })
     .then((response) => response.data);
 };

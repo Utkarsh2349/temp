@@ -3,9 +3,12 @@ import { useState } from "react";
 import { login } from "../Services/user-service";
 import Register from "./Register";
 import DisplayEmploye from "./DisplayEmploye";
+import { toast, ToastContainer } from "react-toastify";
+
 import { Container, Form, FormGroup, Input, Label, Button } from "reactstrap";
 import Cookies from "js-cookie";
 import "./Login.css";
+
 export const Login = () => {
   const [loginData, setLoginData] = useState({ name: "", password: "" });
   const [isRegistered2, setIsRegistered2] = useState(true);
@@ -15,18 +18,36 @@ export const Login = () => {
   };
   const handleLoginButton = (event) => {
     event.preventDefault();
-    login(loginData).then((resp) => console.log(resp));
-    Cookies.set("username", loginData.name, { expires: 1 });
-    setIsLoggedIn(true);
+    login(loginData)
+      .then((resp) => {
+        Cookies.set("username", loginData.name, { expires: 1 });
+        setIsLoggedIn(true);
+        toast.success("Log In Successfull");
+      })
+      .catch((error) => {
+        if (error.response) {
+          toast.error(error.response.data.message);
+        } else if (error.request) {
+          toast.error("Unable to connect");
+        } else {
+          console.log(error);
+          toast.error(error.response.data.message);
+        }
+      });
   };
   const handleRegisterButton = (event) => {
     setIsRegistered2(false);
   };
+  const isFormComplete = () => {
+    return Object.values(loginData).every((value) => value.trim() !== "");
+  };
 
   return (
-    <div style={{
-      backgroundColor:"rgba(44,62,80"
-    }}>
+    <div
+      style={{
+        backgroundColor: "rgba(44,62,80",
+      }}
+    >
       {isRegistered2 && !isLoggedIn && (
         <Container
           style={{
@@ -63,15 +84,28 @@ export const Login = () => {
               <Label htmlFor="password">Password</Label>{" "}
             </FormGroup>
             <br /> <br />
-            <Button color="primary" onClick={handleLoginButton}>
+            <Button
+              disabled={!isFormComplete()}
+              title={
+                !isFormComplete()
+                  ? "Please fill out all the mandatory fields"
+                  : "Login"
+              }
+              color="primary"
+              onClick={handleLoginButton}
+            >
               Login
             </Button>
-            <Button onClick={handleRegisterButton}>Register</Button>
+            <Button title="Register" onClick={handleRegisterButton}>
+              Register
+            </Button>
           </Form>
         </Container>
       )}
-      {!isRegistered2 && <Register />}
-      {isLoggedIn && <DisplayEmploye />}
+      <div>{!isRegistered2 && <Register />}</div>
+      <div style={{ display: isLoggedIn ? "block" : "none" }}>
+        {isLoggedIn && <DisplayEmploye />}
+      </div>
     </div>
   );
 };

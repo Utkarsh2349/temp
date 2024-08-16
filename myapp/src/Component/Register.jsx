@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { register } from "../Services/user-service";
 import { Login } from "./Login";
+import { toast } from "react-toastify";
 import {
   Form,
   Label,
@@ -19,13 +20,34 @@ const Register = () => {
     password: "",
     age: "",
     salary: "",
+    email: "",
+    phoneNo: "",
   });
   //   useEffect(() => {}, [isRegistered]);
   const handleRegisterFormSubmit = (event) => {
     event.preventDefault();
-    console.log(registerData);
-    setIsRegistered(true);
-    register(registerData).then((resp) => console.log(registerData));
+    register(registerData)
+      .then((resp) => {
+        console.log(registerData);
+        setIsRegistered(true);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log("Error", err.response);
+          if (err.response.status === 400) {
+            const { age, salary, name, phoneNo } = err.response.data;
+            console.log("Error", err.response.status);
+            if (age) toast.error(err.response.data.age);
+            else if (salary) toast.error(err.response.data.salary);
+            else if (phoneNo) toast.error(err.response.data.phoneNo);
+          }
+        } else if (err.request) {
+          toast.error("Unable to connect");
+        } else {
+          // console.log(error);
+          toast.error(err.response.data.message);
+        }
+      });
   };
   const handleChange = (event, property) => {
     setRegisterData({
@@ -37,10 +59,16 @@ const Register = () => {
     setIsRegistered(true);
   };
 
+  const isFormComplete = () => {
+    return Object.values(registerData).every((value) => value.trim() !== "");
+  };
+
   return (
     <div
       style={{
-        backgroundColor: "rgba(44,62,80",
+        backgroundColor: "rgba(44,62,80)",
+        // overflow:"auto",
+        height: "50vh",
       }}
     >
       {!isRegistered && (
@@ -48,6 +76,7 @@ const Register = () => {
           style={{
             backgroundColor: "#FFDAB9",
             maxWidth: "500px",
+            // maxHeight:"100%",
             margin: "0 auto",
             padding: "20px",
             border: "1px solid #ccc",
@@ -72,10 +101,34 @@ const Register = () => {
                   />
                   <Label htmlFor="exampleName">Name</Label>
                 </FormGroup>
-
                 <FormGroup floating>
                   <Input
                     type="text"
+                    id="email"
+                    name="email"
+                    value={registerData.email}
+                    onChange={(event) => {
+                      handleChange(event, "email");
+                    }}
+                  />
+                  <Label htmlFor="email">Email Id</Label>
+                </FormGroup>
+                <FormGroup floating>
+                  <Input
+                    type="text"
+                    id="phoneNo"
+                    name="phoneNo"
+                    value={registerData.phoneNo}
+                    onChange={(event) => {
+                      handleChange(event, "phoneNo");
+                    }}
+                  />
+                  <Label htmlFor="phoneNo">Phone Number</Label>
+                </FormGroup>
+
+                <FormGroup floating>
+                  <Input
+                    type="password"
                     id="password"
                     name="password"
                     value={registerData.password}
@@ -88,7 +141,7 @@ const Register = () => {
 
                 <FormGroup floating>
                   <Input
-                    type="text"
+                    type="number"
                     id="age"
                     name="age"
                     value={registerData.age}
@@ -101,7 +154,7 @@ const Register = () => {
 
                 <FormGroup floating>
                   <Input
-                    type="text"
+                    type="number"
                     id="salary"
                     name="salary"
                     value={registerData.salary}
@@ -113,6 +166,7 @@ const Register = () => {
                 </FormGroup>
 
                 <Button
+                  disabled={!isFormComplete()}
                   color="primary"
                   className="ml-2"
                   onClick={handleRegisterFormSubmit}
