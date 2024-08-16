@@ -34,12 +34,17 @@ export default function AddCurrentAddress(props) {
   return (
     <div>
       <Card
-        className="my-2"
-        color="secondary"
-        inverse
-        style={{
-          width: "24rem",
-        }}
+         className="my-2 shadow-lg rounded"
+         color="secondary"
+         inverse
+         style={{
+           display: "flex",
+           flexDirection: "column",
+           width: "30rem",
+           height: "25rem",
+           border: "2px solid #ccc",
+           backgroundColor: "#f8f9fa",
+         }}
       >
         <CardHeader>Add Current Address</CardHeader>
 

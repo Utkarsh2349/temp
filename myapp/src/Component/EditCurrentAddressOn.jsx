@@ -44,11 +44,16 @@ export default function EditCurrentAddressOn(props) {
   return (
     <div>
       <Card
-        className="my-2"
+        className="my-2 shadow-lg rounded"
         color="secondary"
         inverse
         style={{
-          width: "18rem",
+          display: "flex",
+          flexDirection: "column",
+          width: "30rem",
+          height: "25rem",
+          border: "2px solid #ccc",
+          backgroundColor: "#f8f9fa",
         }}
       >
         <CardHeader>Edit Current Address</CardHeader>

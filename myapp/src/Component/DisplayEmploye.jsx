@@ -138,7 +138,7 @@ const DisplayEmploye = () => {
           // justifyContent: "center",
           backgroundColor: "#CBAACB",
           alignItems: "center",
-          height: "110vh",
+          // height: "150vh",
           display: isLoggedIn ? "inline-block" : "none",
         }}
       >

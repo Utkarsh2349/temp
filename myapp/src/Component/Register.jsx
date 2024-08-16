@@ -30,6 +30,7 @@ const Register = () => {
       .then((resp) => {
         console.log(registerData);
         setIsRegistered(true);
+        toast.info("User Registered");
       })
       .catch((err) => {
         if (err.response) {
@@ -40,6 +41,9 @@ const Register = () => {
             if (age) toast.error(err.response.data.age);
             else if (salary) toast.error(err.response.data.salary);
             else if (phoneNo) toast.error(err.response.data.phoneNo);
+          }
+          else if(err.response.data){
+            toast.error(err.response.data.message);
           }
         } else if (err.request) {
           toast.error("Unable to connect");
@@ -103,7 +107,7 @@ const Register = () => {
                 </FormGroup>
                 <FormGroup floating>
                   <Input
-                    type="text"
+                    type="email"
                     id="email"
                     name="email"
                     value={registerData.email}
