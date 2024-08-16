@@ -10,11 +10,14 @@ import {
   Label,
 } from "reactstrap";
 import { updateEmployeeAddress } from "../Services/user-service";
+import { toast } from "react-toastify";
 export default function EditPermanentAddress(props) {
     var username = Cookies.get("username");
   const [addressToBeEdited1, setAddressToBeEdited1] = useState({
     city: props.userData.emp.permanentAddress.city,
     state: props.userData.emp.permanentAddress.state,
+    street: props.userData.emp.permanentAddress.street,
+    pincode: props.userData.emp.permanentAddress.pincode,
   });
   const handleChangeEditPermanentAddress = (event, property) => {
     setAddressToBeEdited1({
@@ -27,6 +30,9 @@ export default function EditPermanentAddress(props) {
       console.log(response);
       props.setIsEditPermanentAddressOn(false);
       props.setIsEditPermanentAddress(true);
+      toast.info("Employe Permanent Address Updated", {
+        position: "bottom-center",
+      });
     });
   };
   const handleEditPermanenttAddressCancelButton = () => {
@@ -45,6 +51,30 @@ export default function EditPermanentAddress(props) {
         <CardHeader>Edit Permanent Address</CardHeader>
 
         <Form>
+        <FormGroup floating>
+            <Input
+              type="text"
+              id="street"
+              name="street"
+              onChange={(event) =>
+                handleChangeEditPermanentAddress(event, "street")
+              }
+              value={addressToBeEdited1.street}
+            />
+            <Label htmlFor="street">Street</Label>
+          </FormGroup>
+          <FormGroup floating>
+            <Input
+              type="text"
+              id="pincode"
+              name="pincode"
+              onChange={(event) =>
+                handleChangeEditPermanentAddress(event, "pincode")
+              }
+              value={addressToBeEdited1.pincode}
+            />
+            <Label htmlFor="pincode">Pincode</Label>
+          </FormGroup>
           <FormGroup floating>
             <Input
               type="text"

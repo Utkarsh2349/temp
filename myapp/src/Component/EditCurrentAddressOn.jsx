@@ -10,6 +10,7 @@ import {
   Label,
 } from "reactstrap";
 import { updateEmployeeAddress } from "../Services/user-service";
+import { toast } from "react-toastify";
 
 export default function EditCurrentAddressOn(props) {
   var username = Cookies.get("username");
@@ -17,6 +18,8 @@ export default function EditCurrentAddressOn(props) {
   const [addressToBeEdited, setAddressToBeEdited] = useState({
     city: props.userData.emp.currentAddress.city,
     state: props.userData.emp.currentAddress.state,
+    street: props.userData.emp.currentAddress.street,
+    pincode: props.userData.emp.currentAddress.pincode,
   });
   const handleChangeEditCurrentAddress = (event, property) => {
     setAddressToBeEdited({
@@ -29,6 +32,9 @@ export default function EditCurrentAddressOn(props) {
       console.log(response);
       props.setIsEditCurrentAddressOn(false);
       props.setIsEditCurrentAddress(true);
+      toast.info("Employe Current Address Updated", {
+        position: "bottom-center",
+      });
     });
   };
   const handleEditCurrentAddressCancelButton = () => {
@@ -48,6 +54,30 @@ export default function EditCurrentAddressOn(props) {
         <CardHeader>Edit Current Address</CardHeader>
 
         <Form>
+          <FormGroup floating>
+            <Input
+              type="text"
+              id="street"
+              name="street"
+              onChange={(event) =>
+                handleChangeEditCurrentAddress(event, "street")
+              }
+              value={addressToBeEdited.street}
+            />
+            <Label htmlFor="street">Street</Label>
+          </FormGroup>
+          <FormGroup floating>
+            <Input
+              type="text"
+              id="pincode"
+              name="pincode"
+              onChange={(event) =>
+                handleChangeEditCurrentAddress(event, "pincode")
+              }
+              value={addressToBeEdited.pincode}
+            />
+            <Label htmlFor="pincode">Pincode</Label>
+          </FormGroup>
           <FormGroup floating>
             <Input
               type="text"
